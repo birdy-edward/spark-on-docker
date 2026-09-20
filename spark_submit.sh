@@ -1,3 +1,6 @@
+
+docker-compose up -f ./docker/docker-compose-spark.yml -d
+
 docker cp ./pyspark_etl/ingest_csv_to_postgre.py spark-master:/opt/spark/work-dir/
 
 docker exec -it spark-master mkdir /opt/spark/work-dir/jars/

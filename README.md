@@ -42,4 +42,15 @@ When all of data in Soundcloud_User.csv tranformed and loaded to database, the n
 <em>Data in  after ETL</em>
 
 
+**3. Execute ETL piple with Shell Script**
+
+I have add new shell script `spark_submit.sh` to combine all commands needed to build up Spark Master&Worker and submit ETL pipeline to master node
+
+Initially, the Spark Master and Workers are installed with docker compose. The differences compared to methods as above is Spark Resources created seperated and my works do submitting to the master node
+
+Steps:
+
+- Open the project
+- Run `chmod +x spark_submit.sh`
+- <code>source ./spark_submit.sh</code>
 
