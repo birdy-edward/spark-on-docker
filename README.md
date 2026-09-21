@@ -44,9 +44,27 @@ When all of data in Soundcloud_User.csv tranformed and loaded to database, the n
 
 **3. Execute ETL piple with Shell Script**
 
-I have add new shell script `spark_submit.sh` to combine all commands needed to build up Spark Master&Worker and submit ETL pipeline to master node
+I have added new shell script `spark_submit.sh` to combine all commands needed to build up Spark Master&Worker and submit ETL pipeline to master node
 
-Initially, the Spark Master and Workers are installed with docker compose. The differences compared to methods as above is Spark Resources created seperated and my works do submitting to the master node
+There are 2 Spark deploying modes: **Spark Client** and **Spark Cluster**
+
+**Spark Client:**
+- Driver runs on a dedicated server (Master node) inside a dedicated process
+- Drive opens up a dedicated Netty HTTP server and distrubutes operational JAR files across all Worker nodes
+- Because the Master's node is in your own, it do not need to spend any resource in Spark cluster for Driver program
+- Suits for live debugging and live notebook
+
+**Spark Cluster:**
+- Driver runs on one of the cluster's Worker nodes. The worker is chosen by the Master leader
+- Driver runs as a dedicated, standalone process inside the Worker.
+- Driver programs takes up at least 1 core and a dedicated amount of memory from one of the workers (this can be configured).
+- Driver program can be monitored from the Master node using the --supervise flag and be reset in case it dies.
+- When working in Cluster mode, all JARs related to the execution of your application need to be publicly available to all the workers. This means you can either manually place them in a shared place or in a folder for each of the workers.
+- It benefits especially for long-lasting jobs with heavy workload which keeps running even when the drive is fallen because the drive would be reinstalled by then on available resources
+
+In this projecs, I build up Spark Cluster in Client mode with specific Spark master after running `docker compose up -f ./docker/docker-compose-spark.yml -d`
+
+Finally, submitting my ETL job to Spark Master, `spark_submit.sh` kind of is about to create a live session to Spark cluster, the job remains executing whenever this connection alive. In constrast, Cluster Mode is turned of if you destroy the connection
 
 Steps:
 
